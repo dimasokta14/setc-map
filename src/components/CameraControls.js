@@ -1,29 +1,37 @@
 import React, { useRef } from "react";
 import { extend, useThree, useFrame } from "react-three-fiber";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { MapControls } from "three/examples/jsm/controls/OrbitControls";
+import {PerspectiveCamera, useGLTF} from '@react-three/drei'
 
-extend({ OrbitControls });
+extend({ MapControls });
 
-const CameraControls = () => {
-  const {
-    camera,
-    gl: { domElement },
-  } = useThree();
+const CameraControls = (props) => {
+  const orbitRef = useRef();
+  const {camera, gl} = useThree()
+  // const {
+  //   camera,
+  //   gl: { domElement },
+  // } = useThree();
 
-  const controls = useRef();
+  // const controls = useRef();
 
-  camera.position.z = 999;
+  // camera.position.z = 999;
 
-  useFrame(() => controls.current.update());
+  useFrame(() => {
+    if(orbitRef.current){
+      orbitRef.current.update()
+    }
+  });
 
-  return (
-    <OrbitControls
-      ref={controls}
-      args={[camera, domElement]}
-      autoRotate={false}
-      enableZoom={false}
-    />
-  );
+  // return (
+  //   <OrbitControls
+  //     ref={controls}
+  //     args={[camera, domElement]}
+  //     autoRotate={false}
+  //     enableZoom={false}
+  //   />
+  // );
+
 };
 
 export default CameraControls;

@@ -31,7 +31,7 @@ const Map = ({layer = DEFAULT_LAYER}) => {
 
 const MapScene = () => {
   return (
-    <Canvas shadowMap style={{ background: '#8e8e8e', height:'100vh' }} camera={{ position: [0, 0, 12], fov: 50 }} gl={{ antialias: false }}>
+    <Canvas shadowMap style={{ background: '#8e8e8e', height:'100vh' }} camera={{ position: [0, 10, 12], fov: 50 }} gl={{ antialias: false }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 60, -100]} intensity={20} />
       <pointLight position={[-50, 0, -50]} intensity={2} />

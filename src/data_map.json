@@ -1,0 +1,134 @@
+[
+  {
+    "code":"B1",
+    "name": "Taman",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "park",
+    "veg": [
+      "","","","",""
+    ],
+    "potensi":[
+      "","","","",""
+    ],
+    "year":[
+      "","","","",""
+    ]
+  },
+  {
+    "code":"B3",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "kacang tanah","","","",""
+    ],
+    "potensi":[
+      "","","","",""
+    ],
+    "year":[
+      "Desember 2020","","","",""
+    ]
+  },
+  {
+    "code":"B4",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Buah naga","","","",""
+    ],
+    "potensi":[
+      "","","","",""
+    ],
+    "year":[
+      "2007","","","",""
+    ]
+  },
+  {
+    "code":"B6",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Cabai","Terong","Okra Merah","Okra Hijau"
+    ],
+    "potensi":null,
+    "year":[
+      "November 2020","November 2020","Desember 2020","Desember 2020"
+    ]
+  },
+  {
+    "code":"B8",
+    "name": "Verticulture",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Kangkung","Bayam","Daun Mint","Bawang Pre","Selada"
+    ],
+    "potensi":null,
+    "year":null
+  
+  },
+  {
+    "code":"B9",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Kacang Tanah","Telang","Pepaya"
+    ],
+    "potensi":null,
+    "year":[
+      "Desember 2020","Desember 2020","Desember 2020"
+    ]
+  },
+  {
+    "code":"B10",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Padi"
+    ],
+    "potensi":null,
+    "year":[
+      "Februari 2021"
+    ]
+  },
+  {
+    "code":"B6",
+    "name": "Sawah",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "type": "field",
+    "veg": [
+      "Cabai","Terong","Okra Merah","Okra Hijau"
+    ],
+    "potensi":null,
+    "year":[
+      "November 2020","November 2020","Desember 2020","Desember 2020"
+    ]
+  }
+
+
+
+
+
+
+
+]

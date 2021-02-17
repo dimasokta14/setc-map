@@ -1,21 +1,38 @@
+import * as THREE from 'three'
+
 import React, { useRef } from "react";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { useFrame, useLoader } from "react-three-fiber";
+import {ColladaLoader} from 'three/examples/jsm/loaders/ColladaLoader';
+import { useFrame, useLoader, useThree } from "react-three-fiber";
+import mars from '../assets/plate.glb'
+import map from '../assets/models/setc_map.dae';
+import {useHelper} from '@react-three/drei'
+import { AxesHelper, BoxHelper } from 'three';
 
-const Sphere = () => {
+
+
+const Sphere = ({position, rotation}) => {
   const planet = useRef();
+  let x;
+  let y;
+  const {mouse, viewport, intersect} = useThree()
 
-  const { nodes } = useLoader(GLTFLoader, "models/mars.glb");
+  const { scene } = useLoader(ColladaLoader, map);
+  // useHelper(planet, BoxHelper, 'teal')
 
-  useFrame(() => (planet.current.rotation.y += 0.0002));
+  // useFrame(() => (planet.current.rotation.y += 0.0002));
 
   return (
-    <mesh
+    <primitive 
+      dispose={null}
+      object={scene} 
+      castShadow
       ref={planet}
-      visible
-      position={[0, 0, 0]}
-      geometry={nodes.Cube008.geometry}
-      material={nodes.Cube008.material}
+      position={position}
+      // children-0-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0xffffff})}
+      // children-1-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0x0000ff})}
+      // children-2-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0x0000ff})}
+      // children-3-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0x00ff00})}
+      // children-4-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0x0000ff})}
     />
   );
 };
