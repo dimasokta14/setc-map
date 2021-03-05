@@ -1,60 +1,22 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+
 import reportWebVitals from './reportWebVitals';
-import {Route, Router} from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
-import {store, history} from './helpers';
-import {Provider, connect} from 'react-redux';
-import { alertActions } from './actions/alertActions';
 
-
-const IndexApp = (props) => {
-  useEffect(() => {
-    const {dispatch} = props
-    history.listen((location, action) => {
-      dispatch(alertActions.clear())
-    })
-  },[])
-  return(
-    <Router history={history}>
-        <Route
-          exact
-          path='/'
-          render={() => <App />}
-        />
-        <Route
-          exact
-          path='/register'
-          render={() => <Register/>}
-        />
-        <Route
-          exact
-          path='/login'
-          render={() => <Login/>}
-        />
-    </Router>
-  )
-}
-
-function mapStateToProps(state){
-  const {alert} = state
-  return{
-    alert
-  }
-}
-
-const connectedApp = connect(mapStateToProps)(IndexApp)
-export {connectedApp as IndexApp}
+import {store} from './helpers';
+import {Provider} from 'react-redux';
+import Router from './Router'
+import App from './App'
+// import FirebaseProvider from './firebase'
 
 ReactDOM.render(
-  <React.StrictMode>
     <Provider store={store}>
-      <IndexApp/>
-    </Provider>
-  </React.StrictMode>,
+      {/* <FirebaseProvider>
+        <Router/>
+      </FirebaseProvider> */}
+      <Router/>
+    </Provider>,
   document.getElementById('root')
 );
 

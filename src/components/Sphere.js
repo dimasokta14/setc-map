@@ -24,8 +24,7 @@ const Sphere = ({position, rotation}) => {
   return (
     <primitive 
       dispose={null}
-      object={scene} 
-      castShadow
+      object={scene}
       ref={planet}
       position={position}
       // children-0-material={new THREE.MeshBasicMaterial({wireframe: true, color: 0xffffff})}

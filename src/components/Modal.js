@@ -10,7 +10,7 @@ const List = ({icon, data}) => {
   )
 }
 
-const Modal = ({display, opacity, onShow}) => {
+const Modal = ({display, opacity, onShow, title}) => {
   return (
     <Container display={display} opacity={opacity}>
       <PointOfInterest>
@@ -19,7 +19,7 @@ const Modal = ({display, opacity, onShow}) => {
           <CardMain>
             <CardLeft>
               <CardDetails>
-                <h3>Ruang Pelatihan 1</h3>
+                <h3>{title}</h3>
                 <CardCategory>
                   <List icon="fas fa-user-friends" data='200 orang'/>
                   {/* <List icon="fas fa-building" data='2012'/> */}

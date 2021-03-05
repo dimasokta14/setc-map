@@ -4,14 +4,17 @@ import styled, {css, createGlobalStyle} from 'styled-components';
 import map from '../assets/images/map.svg';
 import pin from '../assets/images/map-pin.svg';
 import message from '../assets/images/message-square.svg';
-import share from '../assets/images/share-2.svg';
+import idCard from '../assets/images/id-card.svg'
 import soundOn from '../assets/images/volume.svg';
 import soundX from '../assets/images/volume-x.svg';
 import arrowLeft from '../assets/images/arrow-left.svg';
 import soundSample from '../assets/sample.mp3';
+import settings from '../assets/images/settings.svg'
 
-// POI
+// HUD
 import POIList from './POIList'
+import IdCard from './IDCard'
+import Chat from './Chat'
 
 
 // Modal
@@ -19,21 +22,26 @@ import Modal from './Modal';
 // 360 Cam
 
 
-const ButtonIcon = ({icon, onClick, hover, color}) => {
+const ButtonIcon = ({icon, onClick, hover, color, width}) => {
   return(
     <ButtonIconContainer onClick={onClick} onMouseOver={hover}>
-      <Icon src={icon} color={color} width={27}/>
+      <Icon src={icon} color={color} width={width || 27}/>
     </ButtonIconContainer>
   )
 }
 
 
 
-const HUD = ({opacity, back, onShow, list}) => {
+const HUD = ({opacity, back, onShow, list, title}) => {
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false)
   const [audio] = useState(new Audio(soundSample))
   const [POI, setPOI] = useState(null)
+  const [display, setDisplay] = useState({
+    POI: false,
+    IdCard: false,
+    Chat: false
+  })
 
   useEffect(() => {
     playing ? audio.play() : audio.pause();
@@ -65,6 +73,14 @@ const HUD = ({opacity, back, onShow, list}) => {
     }
   ]
 
+  const handleDisplay = (prop) => (e) => {
+    setDisplay({...!display, [prop]: true})
+  }
+
+  const handleClose = (prop) => (e) => {
+    setDisplay({...display, [prop]: false})
+  }
+
   return (
     <>
       <Container>
@@ -74,19 +90,27 @@ const HUD = ({opacity, back, onShow, list}) => {
           </TopLeftContainer>
           <TopRightContainer>
             <ButtonIcon 
-              icon={playing ? soundOn : soundX} 
-              onClick={() => setPlaying(!playing)}
-              hover={() => console.log('ok')}
+              icon={idCard}
+              width={35} 
+              // onClick={() => setPlaying(!playing)}
+              // hover={() => console.log('ok')}
             />
           </TopRightContainer>
         </ContainerTop>
-        <Modal display='flex' opacity={opacity} onShow={onShow}/>
+        <Modal display='flex' opacity={opacity} onShow={onShow} title={title}/>
         <ContainerBottom>
           <BottomLeftContainer>
             <POIList 
-              display={POI}
-              onClose={() => setPOI(null)}
+              display={display.POI}
+              onClose={handleClose('POI')}
               list={list}
+            />
+            <IdCard
+              display={display.IdCard}
+            />
+            <Chat
+              display={display.Chat}
+              onClose={handleClose('Chat')}
             />
             <ButtonIcon 
               icon={map} 
@@ -96,10 +120,16 @@ const HUD = ({opacity, back, onShow, list}) => {
             />
             <ButtonIcon 
               icon={pin}
-              onClick={() => setPOI('flex')} 
+              onClick={handleDisplay('POI')} 
             />
-            <ButtonIcon icon={message}/>
-            <ButtonIcon icon={share}/>
+            <ButtonIcon 
+              icon={message}
+              onClick={handleDisplay('Chat')}
+            />
+            <ButtonIcon 
+              icon={idCard}
+              onClick={handleDisplay('IdCard')}
+            />
           </BottomLeftContainer>
         </ContainerBottom>
       </Container>
@@ -139,6 +169,9 @@ const ContainerBottom = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  @media(max-width: 768px){
+    justify-content: center;
+  }
 `
 
 const ContainerTop = styled.div`
@@ -170,9 +203,9 @@ border-radius: 0.25rem;
 
 const TopRightContainer = styled.div`
 background-color: white;
-width: 50px;
-height: 50px;
-border-radius: 50%;
+width: 60px;
+height: 60px;
+border-radius: 5px;
 display: flex;
 justify-content: center;
 `

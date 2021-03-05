@@ -1,20 +1,23 @@
-import { userConstants } from '../constants/userConstants';
+const defaultState = {
+    loggedIn: false,
+    user: {}
+}
 
-export default function(state = {}, action) {
-    switch (action.type) {
-    case userConstants.GETALL_REQUEST:
-        return {
-        loading: true
-        };
-    case userConstants.GETALL_SUCCESS:
-        return {
-        items: action.users
-        };
-    case userConstants.GETALL_FAILURE:
-        return { 
-        error: action.error
-        };
-    default:
-        return state
+const userReducer = (state = defaultState, action) => {
+    switch(action.type){
+        case "SET_USER":
+            return {
+                loggedIn: true,
+                user: {...action.payload}
+            }
+        case "LOG_OUT":
+            localStorage.clear()
+            return {
+                loggedIn: false,
+                user: {}
+            }
+        default: return state
     }
 }
+
+export default userReducer

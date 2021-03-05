@@ -12,7 +12,7 @@ const Icon = ({name}) => {
 const POIList = ({display, onClose, list}) => {
   console.log(list)
   return (
-    <Container display={display}>
+    <Card display={display}>
       <CardHeader>
         <TextHeader>Pilih Fasilitas</TextHeader>
         <CloseButton onClick={onClose}>
@@ -30,32 +30,25 @@ const POIList = ({display, onClose, list}) => {
           </POI>
         ))}
       </CardBody>
-    </Container>
+    </Card>
   )
 }
 
 const Card = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  display: flex;
-  postion: relative;
+bottom: 85px;
+left: 23px;
+width: 350px;
+max-height: 85vh;
+z-index: 99999 !important;
+position: fixed;
+overflow: hidden;
+border-radius: .25rem;
+--bg-opacity: 1;
+background-color: rgba(255,255,255,var(--bg-opacity));
+display: ${props => props.display || 'none'};
+flex-direction: column;
 `
 
-const Container = styled.div`
-  bottom: 85px;
-  left: 23px;
-  width: 350px;
-  max-height: 85vh;
-  z-index: 99999 !important;
-  position: fixed;
-  overflow: hidden;
-  border-radius: .25rem;
-  --bg-opacity: 1;
-  background-color: rgba(255,255,255,var(--bg-opacity));
-  display: ${props => props.display || 'none'};
-  flex-direction: column;
-`
 const CardHeader = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {FormGroup, Label, Input, Select, Options} from '../Forms';
+import {FormGroup, Label, Input, Select, Options, CustomInput} from '../Forms';
 import styled from 'styled-components';
 
-export const Name = ({onChangeName, valueName, currentStep, navigation}) => {
+export const Name = ({onChangeFirstName, valueFirstName, currentStep, navigation, onChangeLastName, valueLastName}) => {
 
   if(currentStep !== 'name') {
     return null
@@ -17,10 +17,20 @@ export const Name = ({onChangeName, valueName, currentStep, navigation}) => {
           <Label>Boleh tau Nama Lengkap Kamu ?</Label>
           <Input
             className='u-full-width'
-            placeholder='Nama Lengkap'
+            placeholder='Nama Depan'
             type='text'
-            onChange={onChangeName}
-            value={valueName}
+            onChange={onChangeFirstName}
+            value={valueFirstName}
+            autoFocus
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            className='u-full-width'
+            placeholder='Nama Belakang'
+            type='text'
+            onChange={onChangeLastName}
+            value={valueLastName}
             autoFocus
           />
         </FormGroup>
@@ -150,6 +160,77 @@ export const NewsLetter = ({valueNews, onChangeNews, currentStep, onSubmit, navi
         <ButtonNext onClick={onSubmit}>Simpan</ButtonNext>
       </Row>
     </div>
+  )
+}
+
+export const Password = ({
+  currentStep, 
+  navigation, 
+  onChangePassword, 
+  onChangeRetypePassword, 
+  valuePassword, 
+  valueRetypePassword,
+  onClickPwd,
+  onClickRePwd,
+  visibilityPwd,
+  visibilityRePwd
+}) => {
+
+  const {prev, next} = navigation
+
+  if(currentStep !== 'password') {
+    return null
+  }
+
+  return(
+    <>
+      <div className='row'>
+        <FormGroup>
+          <Label>Buat Password</Label>
+          <div style={{position:'relative'}}>
+            <CustomInput
+              className='u-full-width'
+              type={visibilityPwd ? 'text' : 'password'}
+              onChange={onChangePassword}
+              value={valuePassword}
+              autoFocus
+            />
+            <button className='unmask' onClick={onClickPwd}>
+              {
+                !visibilityPwd ? 
+                  <i className='far fa-eye-slash' style={{color:'#686f65'}}/> :
+                  <i className='far fa-eye' style={{color:'#0D2840'}}/>
+              }
+            </button>
+          </div>
+        </FormGroup>
+      </div>
+      <div className='row'>
+        <FormGroup>
+          <Label>Ketik Ulang Password</Label>
+          <div style={{position:'relative'}}>
+            <CustomInput
+              className='u-full-width'
+              onChange={onChangeRetypePassword}
+              value={valueRetypePassword}
+              type={visibilityRePwd ? 'text' : 'password'}
+              autoFocus
+            />
+            <button className='unmask' onClick={onClickRePwd}>
+              {
+                !visibilityPwd ? 
+                  <i className='far fa-eye-slash' style={{color:'#686f65'}}/> :
+                  <i className='far fa-eye' style={{color:'#0D2840'}}/>
+              }
+            </button>
+          </div>
+        </FormGroup>
+      </div>
+      <Row>
+        <ButtonPrev onClick={prev}>Kembali</ButtonPrev>
+        <ButtonNext onClick={next}>Lanjut</ButtonNext>
+      </Row>
+    </>
   )
 }
 

@@ -1,23 +1,25 @@
-import React, {useRef, useState, useMemo, useEffect} from 'react';
+import React, {useRef, useState, useMemo, useEffect, memo} from 'react';
 import {useFrame, useLoader} from 'react-three-fiber';
 import * as THREE from 'three';
 import sound from '../assets/images/volume.svg';
 import BuildingMtrl from '../assets/images/icon_building.jpg' 
 import {Html} from '@react-three/drei';
 import styled from 'styled-components';
-import {TextureLoader} from 'three'
+import {TextureLoader} from 'three';
+import {connect} from 'react-redux';
+import {pinActions} from '../actions'
 
 const Pin = ({data, onClick}) => {
 
   const x = 0;
   const y = 0;
   const hexagon = new THREE.Shape()
-  hexagon.moveTo(0, 4);
-  hexagon.lineTo(x + 3.5,y + 2.5);
-  hexagon.lineTo(x + 3.5, y - 2.5);
-  hexagon.lineTo(0, y - 4);
-  hexagon.lineTo(x - 3.5, y - 2.5);
-  hexagon.lineTo(x - 3.5, y + 2.5);
+  hexagon.moveTo(0, 3);
+  hexagon.lineTo(x + 2.5,y + 1.5);
+  hexagon.lineTo(x + 2.5, y - 1.5);
+  hexagon.lineTo(0, y - 3);
+  hexagon.lineTo(x - 2.5, y - 1.5);
+  hexagon.lineTo(x - 2.5, y + 1.5);
 
   const extrudeSettings = {
     depth: 0.5,
@@ -58,6 +60,11 @@ const Pin = ({data, onClick}) => {
 
   useEffect(() => void (previous.current = hover), [hover])
 
+  const handleClick = (props) => {
+    console.log(hover)
+    props.clickPOI(hover, 1)
+  }
+
   const dummy = new THREE.Object3D()
   const dummyColor = new THREE.Color()
   const hexagonPin = useMemo(
@@ -69,7 +76,7 @@ const Pin = ({data, onClick}) => {
       }))
   )
 
-  console.log(previous.current)
+  console.log(hover)
 
     
   useFrame((state) => {
@@ -81,18 +88,18 @@ const Pin = ({data, onClick}) => {
       const scale = id === hover ? 1.5 : 1
       const speed = id === hover ? 0.1 : 0.01
       dummy.scale.set(scale, scale, scale)
-      dummy.rotation.y += speed
-      // if(hover !== previous.current){
-      //   dummyColor.set(id === hover ? '#407352': 'orange')
-      //   mesh.current.geometry.attributes.color.needsUpdate = true
-      // }
+      dummy.rotation.y = Math.sin(time)
+      dummy.name = element.name
+      if(hover !== previous.current){
+        dummyColor.set(id === hover ? '#407352': 'orange')
+        // mesh.current.attributes.id.needsUpdate = hover
+        // mesh.current.geometry.attributes.color.needsUpdate = true
+      }
       dummy.updateMatrix()
       mesh.current.setMatrixAt(id, dummy.matrix)
     });
     mesh.current.instanceMatrix.needsUpdate = true
   })
-
-  console.log(hover)
 
 
   return (
@@ -101,19 +108,13 @@ const Pin = ({data, onClick}) => {
         ref={mesh}
         onPointerMove={(e) => set(e.instanceId)}
         onPointerOut={(e) => set(undefined)}
+        onClick={onClick}
       >
         <extrudeBufferGeometry attach='geometry' args={[hexagon, extrudeSettings]}/>
           {/* <instancedBufferAttribute attachObject={['attributes', 'color']} args={[hover ? 'orange': 'green', 3, true]}/>
         </extrudeBufferGeometry> */}
         {/* <meshBasicMaterial attach='material' color={hover ? 'orange': '#407352'}/> */}
-        <meshStandardMaterial roughness={0.75} emissive="#404057" color='#407352'/>
-        {/* <meshStandardMaterial map={icon_texture1} attachArray='material'/>
-        <meshStandardMaterial map={icon_texture1} attachArray='material'/> */}
-        {data && data.map((item) => (
-          <Html scaleFactor={40} position={[item.x, item.y, item.z]}>
-            <Content>{item.name}</Content>
-          </Html>
-        ))}
+        <meshStandardMaterial map={icon_texture1} roughness={0.75} emissive="#404057" color='#407352'/>
       </instancedMesh>
   )
 }
@@ -127,5 +128,16 @@ color: black;
 padding: 10px 15px;
 border-radius: 5px;
 `
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     clickPOI: (data) => dispatch(pinActions.clickPOI(data))
+//   }
+// }
+
+const mapStateToProps = (state) => {
+  return {
+    clickPOI: pinActions.clickPOI(state)
+  }
+}
 
 export default Pin

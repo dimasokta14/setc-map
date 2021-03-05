@@ -1,58 +1,43 @@
-import React, { Suspense, useMemo, useState, useEffect, useRef, Fragment, useCallback } from "react";
+import React, { Suspense, memo, useState, useEffect, useRef, Fragment, useCallback } from "react";
 import * as THREE from 'three'
-import { Canvas, useThree, useFrame} from "react-three-fiber";
+import { Canvas, useThree, useFrame, extend} from "react-three-fiber";
 import "./styles.css";
-import Planet from './Plate'
 import Camera from './components/Camera';
 import Loading from './components/Loading'
 
 import { CameraControls, Sphere, SkyBox } from "./components";
-import {OrbitControls, softShadows, MapControls} from 'drei'
-import { PerspectiveCamera } from "@react-three/drei";
 import HUD from './components/HUD';
 import Pin from './components/Pin';
-import WelcomeScreen from './components/WelcomeScreen'
-import * as FirestoreService from './firebase';
 import firebase from './firebase';
 import styled from 'styled-components';
 import Photo360Window from './components/Photo360Window';
-import DataCollection from './components/DataCollection';
+import MapControl from './components/MapController'
 
-// Tes
-import Effects from './components/tes/Effects';
-import Boxes from './components/tes/Box'
+// action
+import {pinActions} from './actions'
+
+// TES
+import FeaturePin from './components/FeaturePin'
+import { Object3D } from "three";
+
+// texture
+import One from './assets/images/1.png'
+import Building from './assets/images/building.png'
+
+import {useDispatch} from 'react-redux'
 
 const App = () => {
 
-  const db = firebase.firestore()
 
   const [features, setFeatures] = useState();
-  const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [opacity, setOpacity] = useState(0);
   const [enter, setEnter] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [welcome, setWelcome] = useState(true)
 
-  // const onDataChange = (items) => {
-  //   let features = [];
+  // dispatch
+  const dispatch = useDispatch()
 
-  //   items.docs.forEach(item => {
-  //     let id = item.id;
-  //     let data = item.data();
-
-  //     features.push({
-  //       id: id,
-  //       name: data.name,
-  //       type: data.type,
-  //       x: data.position[0],
-  //       y: data.position[1],
-  //       z: data.position[2]
-  //     })
-  //   });
-  //   setIsLoading(false)
-  //   setFeatures(features)
-  // }
+  const gridHelper = useRef()
 
   useEffect(() => {
     const fetchFeatures = async () => {
@@ -73,6 +58,7 @@ const App = () => {
               z: data.z
             })
           });
+          dispatch(pinActions.setPin(features))
           setIsLoading(false)
           setFeatures(features)
       })
@@ -84,22 +70,22 @@ const App = () => {
 
   },[])
 
+  const handleClick = (e) => {
+    console.log(e.target.getAtrribute("data-name"))
+    setOpacity(1)
+  }
+
   const mouseControllers = {
     LEFT: THREE.MOUSE.PAN,
     MIDDLE: THREE.MOUSE.DOLLY,
     RIGHT: THREE.MOUSE.ROTATE
   }
 
-  const CameraSetting = {
-    fov: 45,
-    position: [-5,90,100],
-    near: 0.1,
-    far: 1500
-  }
+  
+
     return (
       <Fragment>
         <Loading display={isLoading ? 'flex': 'none'}/>
-        <WelcomeScreen display={welcome ? 'block': 'none'} onClick={() => setWelcome(false)}/>
         <Container>
           <Photo360Window 
             display={enter ? 'flex' : 'none'} 
@@ -117,6 +103,7 @@ const App = () => {
             style={{height: '100vh', backgroundColor: '#C3EAF1', position: "fixed"}}
             receiveShadow
           >
+            {/* <gridHelper args={[700, 700, `white`, `gray`]}/> */}
             <ambientLight intensity={0.3} />
             <directionalLight
               castShadow
@@ -130,23 +117,37 @@ const App = () => {
             <Camera/>
             <pointLight position={[150, 150, 50]} intensity={0.55} />
             <Suspense fallback='loading'>
-              <group>
-                {features && <Pin data={features} onClick={() => setOpacity(1)}/>}
+                {/* {features && <Pin data={features} onClick={() => handleClick()}/>} */}
                 {/* <Effects /> */}
                 <Sphere
-                  position={[0, -20, 0]}
+                  position={[0, 0, 0]}
                 />
-              </group>
             </Suspense>
-            <OrbitControls
-              mouseButtons={mouseControllers}
-              panSpeed={2}
-              screenSpacePanning={false}
+            <object3D>
+              {
+                features && features.map((data, index) => (
+                  <FeaturePin 
+                    position={[data.x, data.y, data.z]} 
+                    textureURL={Building} 
+                    key={data.id}
+                    onClick={handleClick}
+                    // id={data.name}
+                  />
+                ))
+              }
+            </object3D>
+            {/* <MapControls
+              ref={mapController}
               maxPolarAngle={Math.PI/2}
               maxAzimuthAngle={Math.PI/1}
               maxDistance={100}
-              // zoomSpeed={20}
-            />
+              panSpeed={10}
+              touches={{
+                ONE: THREE.TOUCH.DOLLY_PAN, 
+                TWO: THREE.TOUCH.ROTATE
+              }}
+            /> */}
+            <MapControl/>
           </Canvas>
         </Container>
       </Fragment>
@@ -159,4 +160,4 @@ const Container = styled.div`
   width: 100vw;
 `
 
-export default App;
+export default memo(App);

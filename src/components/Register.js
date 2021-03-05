@@ -1,35 +1,52 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import Hi from '../assets/images/hi.png';
-import {Name, EmailPhone, Institusi, NewsLetter} from '../components/FormStep/MultiStep';
+import {Name, EmailPhone, Institusi, NewsLetter, Password} from '../components/FormStep/MultiStep';
 import {useForm, useStep} from 'react-hooks-helper'
+import {userActions} from '../actions'
+import {connect} from 'react-redux'
 
 const steps = [
   {id: 'name'},
   {id: 'email'},
+  {id: 'password'},
   {id: 'group'},
   {id: 'news'},
   {id: 'submit'}
 ]
 
 
-const Register = () => {
-  const [currentStep, setCurrentStep] = useState(1)
+const Register = (props) => {
+  // const [currentStep, setCurrentStep] = useState(1)
   const {step, navigation} = useStep({initialStep: 0, steps})
+  const [visibilityPassword, setVisibilityPassword] = useState(false)
   const {id} = step
   const [values, setValues] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     group: '',
     institusi: '',
-    newsletter: false
+    newsletter: false,
+    password: '',
+    rePassword: ''
   })
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const handleSubmit = () => {
-    console.log('oke')
+
+  const handleShowPassword = () => {
+    setVisibilityPassword(!visibilityPassword)
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    try {
+      props.signUp(values)
+      return console.log('success')
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
   <Container>
@@ -39,12 +56,13 @@ const Register = () => {
           <img src={Hi} width='350px'/>
         </FormLeft>
         <FormRight>
-            <Title>Selamat Datang!<br/>{values.name !== '' ? values.name : null}</Title>
+            <Title>Selamat Datang!<br/>{values.firstName !== '' ? `${values.firstName} ${values.lastName}` : null}</Title>
           <>
-            <form onSubmit={handleSubmit()}>
               <Name 
-                onChangeName={handleChange('name')}
-                valueName={values.name}
+                onChangeFirstName={handleChange('firstName')}
+                onChangeLastName={handleChange('lastName')}
+                valueFirstName={values.firstName}
+                valueLastName={values.lastName}
                 currentStep={id}
                 navigation={navigation}
               />
@@ -55,6 +73,18 @@ const Register = () => {
                 valuePhone={values.phone}
                 currentStep={id}
                 navigation={navigation}
+              />
+              <Password
+                onChangePassword={handleChange('password')}
+                onChangeRetypePassword={handleChange('rePassword')}
+                valuePassword={values.password}
+                valueRetypePassword={values.rePassword}
+                currentStep={id}
+                navigation={navigation}
+                onClickPwd={handleShowPassword}
+                onClickRePwd={handleShowPassword}
+                visibilityPwd={visibilityPassword}
+                visibilityRePwd={visibilityPassword}
               />
               <Institusi 
                 onChangeGroup={handleChange('group')}
@@ -69,9 +99,8 @@ const Register = () => {
                 valueNews={values.name}
                 currentStep={id}
                 navigation={navigation}
-                onSubmit={() => console.log('ok')}
+                onSubmit={handleSubmit}
               />
-            </form>
           </>
         </FormRight>
       </FormContainer>
@@ -185,4 +214,11 @@ const Form = styled.div`
   width: 100%
 `
 
-export default Register
+//Dispatch to props
+const mapDispatchToProps = dispatch => {
+  return {
+    signUp: (userInfo) => dispatch(userActions.signUp(userInfo))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Register)

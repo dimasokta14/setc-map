@@ -1,4 +1,3 @@
-import config from 'config';
 import {authHeader} from '../helpers';
 
 export const userService = {
@@ -14,7 +13,7 @@ function login(email, password){
     body: JSON.stringify({email, password})
   }
 
-  return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+  return fetch(`api/users/authenticate`, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem('user', JSON.stringify('user'))
@@ -32,7 +31,7 @@ function getAll(){
     headers: authHeader()
   }
 
-  return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse)
+  return fetch(`api/users`, requestOptions).then(handleResponse)
 }
 
 function handleResponse(response) {
@@ -42,7 +41,7 @@ function handleResponse(response) {
           if (response.status === 401) {
               // auto logout if 401 response returned from api
               logout();
-              location.reload(true);
+              window.location.reload(true);
           }
 
           const error = (data && data.message) || response.statusText;

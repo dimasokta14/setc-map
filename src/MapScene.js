@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { render } from 'react-dom'
-import React, { Suspense, useEffect, useRef, useMemo } from 'react'
-import { Canvas, useThree, useFrame, extend } from 'react-three-fiber'
+import React, { Suspense, useRef, useMemo } from 'react'
+import { Canvas, useFrame} from 'react-three-fiber'
 import {useGLTF} from '@react-three/drei'
 
 const DEFAULT_LAYER = 0

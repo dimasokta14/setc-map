@@ -4,6 +4,7 @@ import logo from '../assets/images/setc-city-map.png';
 import {Name, EmailPhone, Institusi, NewsLetter} from '../components/FormStep/MultiStep';
 import Hi from '../assets/images/hi.png';
 import {useForm, useStep} from 'react-hooks-helper';
+import {useHistory} from 'react-router-dom'
 
 const steps = [
   {id: 'name'},
@@ -12,13 +13,14 @@ const steps = [
   {id: 'news'}
 ]
 
-const WelcomeScreen = ({display, onClick}) => {
+const WelcomeScreen = (props) => {
+  const history = useHistory()
   return (
-    <Container display={display}>
+    <Container display='flex'>
       <ContainerContent>
         <Box>
           <img width='500px' src={logo}/>
-          <ButtonEnter onClick={onClick}>MULAI MENJELAJAH</ButtonEnter>
+          <ButtonEnter onClick={() => history.push('/map')}>MULAI MENJELAJAH</ButtonEnter>
         </Box>
       </ContainerContent>
       <ContainerFooter>

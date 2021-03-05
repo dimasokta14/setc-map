@@ -2,9 +2,13 @@ import {combineReducers} from 'redux'
 import users from './userReducers';
 import authentication from './authReducers';
 import alerts from './alertReducers';
+import pins from './pinReducers'
 
-export default combineReducers({
+const rootReducer = combineReducers({
   users,
   authentication,
-  alerts
+  alerts,
+  pins
 })
+
+export default rootReducer

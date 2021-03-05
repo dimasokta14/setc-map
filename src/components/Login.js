@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import styled from 'styled-components';
 import Hi from '../assets/images/hi.png';
 import {Input, Label, FormGroup, Message} from '../components/Forms';
@@ -9,25 +9,20 @@ import {connect} from 'react-redux'
 const Login = (props) => {
   const [values, setValues] = useState({
     email: '',
-    password: '',
-    submitted: false
+    password: ''
   })
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault()
-    setValues({submitted: true})
-    const {dispatch} = props
-    if(values.email && values.password) {dispatch(userActions.login(values.email, values.password))}
+    // setValues({...values, submitted: true})
+    console.log(values)
+    if(values.email && values.password) {props.login(values)}
   }
 
-  useEffect(() => {
-    const {dispatch} = props
-    dispatch(userActions.logout())
-  },[])
   return (
-  <Container>
+<Container>
     <ContainerContent>
       <FormContainer>
         <FormLeft>
@@ -36,14 +31,14 @@ const Login = (props) => {
         <FormRight>
             <Title>Selamat Datang!<br/>Dimas Okta Arifani</Title>
           <>
-            <form onSubmit={handleSubmit()}>
+            <form onSubmit={handleSubmit}>
               <div>
                 <FormGroup>
                   <Label>Email</Label>
                   <Input
                     placeholder='Masukan Email Kamu'
                     type='text'
-                    onChange={() => handleChange('email')}
+                    onChange={handleChange('email')}
                     value={values.email}
                     autoFocus
                   />
@@ -56,7 +51,7 @@ const Login = (props) => {
                   <Label>Password</Label>
                   <Input
                     type='text'
-                    onChange={() => handleChange('password')}
+                    onChange={handleChange('password')}
                     value={values.password}
                     autoFocus
                   />
@@ -67,9 +62,9 @@ const Login = (props) => {
                 </FormGroup>
               </div>
               <Button>Login</Button>
-              {props.loggingIn &&
+              {/* {props.loggingIn &&
                   <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-              }
+              } */}
             </form>
           </>
         </FormRight>
@@ -152,10 +147,10 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
 `
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => {
   return{
-    loggingIn: state.authentication
+    login: (userInfo) => dispatch(userActions.login(userInfo))
   }
 }
 
-export default connect(mapStateToProps, null)(Login)
+export default connect(null, mapDispatchToProps)(memo(Login))
